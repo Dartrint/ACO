@@ -1,6 +1,7 @@
 import unittest
+from unittest.mock import patch
 
-from quantum_tsp import QAOAConfig, solve_qaoa_tsp
+from quantum_tsp import QAOAConfig, run_comparison, solve_qaoa_tsp
 
 
 DISTANCES = [
@@ -11,6 +12,17 @@ DISTANCES = [
 
 
 class QAOATests(unittest.TestCase):
+    def test_comparison_uses_qaoa_seed_for_aco_when_seed_is_omitted(self) -> None:
+        config = QAOAConfig(seed=19)
+        with (
+            patch("quantum_tsp.AntColony") as colony_type,
+            patch("quantum_tsp.solve_qaoa_tsp", return_value={}),
+        ):
+            colony_type.return_value.solve.return_value = ((0, 1, 2), 12.0)
+            run_comparison([(0, 0), (3, 0), (0, 4)], qaoa_config=config)
+
+        self.assertEqual(colony_type.call_args.kwargs["seed"], 19)
+
     def test_runs_real_qaoa_on_aer_and_returns_decodable_samples(self) -> None:
         result = solve_qaoa_tsp(
             DISTANCES,

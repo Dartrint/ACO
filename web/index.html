@@ -1080,7 +1080,7 @@
       <select id="city-count" aria-label="Số thành phố">
         <option value="4" selected>Dữ liệu mẫu · 4 thành phố</option>
         <option value="3">Dữ liệu mẫu · 3 thành phố</option>
-        <option value="custom" disabled>Tọa độ tùy chỉnh</option>
+        <option value="custom">Tọa độ tùy chỉnh</option>
       </select>
     </label>
     <p class="r-local-data-note">Không gửi dữ liệu ra ngoài.<br>Tính toán chạy cục bộ.</p>
@@ -1438,7 +1438,16 @@
     }
 
     cityCount.addEventListener("change", () => {
-      if (cityCount.value === "custom") return;
+      if (cityCount.value === "custom") {
+        coordinateEditor.value = formatCoordinates(points);
+        updateInstanceLabel(true);
+        coordinatesMessage.textContent =
+          "Chế độ tọa độ tùy chỉnh đã mở. Sửa các dòng rồi nhấn ÁP DỤNG TỌA ĐỘ.";
+        lastResult = null;
+        resetResults();
+        renderMap();
+        return;
+      }
       points = citySets[Number(cityCount.value)];
       lastResult = null;
       coordinateEditor.value = formatCoordinates(points);

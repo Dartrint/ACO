@@ -123,6 +123,7 @@ def run_comparison(
     alpha: float = 1.0,
     beta: float = 3.0,
     evaporation_rate: float = 0.5,
+    seed: int | None = None,
     qaoa_config: QAOAConfig | None = None,
 ) -> dict[str, object]:
     if not 3 <= len(points) <= 4:
@@ -137,7 +138,7 @@ def run_comparison(
             beta=beta,
             evaporation_rate=evaporation_rate,
         ),
-        seed=(qaoa_config or QAOAConfig()).seed,
+        seed=(qaoa_config or QAOAConfig()).seed if seed is None else seed,
     )
 
     started = time.perf_counter()

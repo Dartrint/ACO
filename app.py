@@ -163,6 +163,7 @@ class ExperimentHandler(BaseHTTPRequestHandler):
                 alpha=settings.alpha,
                 beta=settings.beta,
                 evaporation_rate=settings.evaporation_rate,
+                seed=settings.seed,
                 qaoa_config=settings.qaoa,
             )
             self._send_json(200, result)
